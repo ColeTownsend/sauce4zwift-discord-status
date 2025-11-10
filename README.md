@@ -35,30 +35,24 @@ cd sauce4zwift-discord-status
 npm install
 ```
 
-### Step 3: Create a Discord Application
-
-1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
-2. Click "New Application"
-3. Give it a name (e.g., "Zwift Status")
-4. Click "Create"
-5. Copy the **Application ID** (also called Client ID)
-6. (Optional) Upload a logo for your application under "Rich Presence > Art Assets"
-   - Upload an image with key `zwift_logo` for the main image
-   - You can use any Zwift-related image (512x512 recommended)
-
-### Step 4: Configure Environment Variables
+### Step 3: Configure Environment Variables
 
 1. Copy the example environment file:
    ```bash
    cp .env.example .env
    ```
 
-2. Edit `.env` and add your Discord Client ID:
-   ```
-   DISCORD_CLIENT_ID=your_client_id_here
-   ```
+2. (Optional) The `.env` file already includes a shared Discord Client ID that works out of the box!
+   - The default Client ID is already configured
+   - Everyone can use the same Client ID (this is normal for Rich Presence apps)
+   - Your Discord status will show "Zwift Status" with a Zwift logo
 
-### Step 5: Install as Sauce4Zwift Plugin (Optional)
+3. (Advanced) If you want to customize the app name or logo:
+   - Create your own Discord Application at [Discord Developer Portal](https://discord.com/developers/applications)
+   - Upload custom images under "Rich Presence > Art Assets" (key: `zwift_logo`)
+   - Replace the `DISCORD_CLIENT_ID` in `.env` with your own Client ID
+
+### Step 4: Install as Sauce4Zwift Plugin (Optional)
 
 To have this plugin recognized by Sauce4Zwift:
 
@@ -146,12 +140,6 @@ UNITS=imperial  # or "metric"
 - Verify Sauce4Zwift is running
 - Check that Sauce4Zwift is running on port 1080 (default)
 - Make sure no firewall is blocking localhost connections
-
-### "DISCORD_CLIENT_ID is not set"
-
-- Make sure you've created a `.env` file (not `.env.example`)
-- Verify your Discord Client ID is correctly copied
-- No quotes needed around the Client ID in `.env`
 
 ### Discord status not updating
 
