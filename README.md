@@ -1,15 +1,17 @@
 # Sauce4Zwift Discord Status
 
-Sync your Zwift ride data from Sauce4Zwift to Discord Rich Presence. Show your friends your current speed, average power, and ride duration in real-time!
+Sync your Zwift ride data from Sauce4Zwift to Discord Rich Presence. Show your friends your current speed, distance, power, and location in real-time!
 
 ## Features
 
 - Real-time Discord Rich Presence updates
-- Displays current speed (mph)
+- Displays current speed and distance (imperial or metric)
 - Shows current power output (watts)
-- Displays average power
+- Displays current world and route name
 - Automatic ride duration tracking
-- Auto-reconnect to Sauce4Zwift if connection drops
+- Automatically uses your Sauce4Zwift units preference (imperial/metric)
+- Event detection and display
+- Reliable REST API integration with automatic reconnection
 
 ## Prerequisites
 
@@ -42,7 +44,7 @@ npm install
 5. Copy the **Application ID** (also called Client ID)
 6. (Optional) Upload a logo for your application under "Rich Presence > Art Assets"
    - Upload an image with key `zwift_logo` for the main image
-   - Upload an image with key `power_meter` for the power indicator
+   - You can use any Zwift-related image (512x512 recommended)
 
 ### Step 4: Configure Environment Variables
 
@@ -91,10 +93,11 @@ To have this plugin recognized by Sauce4Zwift:
    ```
 
 5. Start riding in Zwift! Your Discord status will automatically update with:
-   - Current speed
-   - Current power output
-   - Average power
-   - Ride duration
+   - Current speed (mph or kph)
+   - Distance traveled (miles or km)
+   - Current power output (watts)
+   - Current world and route name
+   - Ride duration (elapsed time)
 
 ### Development Mode
 
@@ -115,14 +118,20 @@ DISCORD_CLIENT_ID=your_client_id_here
 # Optional: Sauce4Zwift connection (defaults shown)
 SAUCE_HOST=localhost
 SAUCE_PORT=1080
+
+# Optional: Units preference (defaults to your Sauce4Zwift setting)
+# The plugin automatically detects your Sauce4Zwift units preference
+# Only set this if you want to override it
+UNITS=imperial  # or "metric"
 ```
 
 ## How It Works
 
-1. **Connects to Sauce4Zwift WebSocket API** at `ws://localhost:1080/api/ws/events`
-2. **Subscribes to athlete data** including speed, power, and duration
-3. **Updates Discord Rich Presence** every 5 seconds with your current stats
-4. **Auto-reconnects** if Sauce4Zwift disconnects
+1. **Connects to Sauce4Zwift REST API** at `http://localhost:1080/api`
+2. **Fetches your units preference** from Sauce4Zwift settings
+3. **Polls athlete data** every 2 seconds including speed, power, distance, and location
+4. **Updates Discord Rich Presence** every 5 seconds with your current stats (throttled to avoid rate limiting)
+5. **Automatically detects worlds and routes** using the zwift-data package
 
 ## Troubleshooting
 
@@ -152,20 +161,21 @@ SAUCE_PORT=1080
 
 ## API Reference
 
-### Sauce4Zwift WebSocket API
+### Sauce4Zwift REST API
 
-This plugin connects to Sauce4Zwift's WebSocket API to receive real-time athlete data:
+This plugin connects to Sauce4Zwift's REST API to fetch real-time athlete data:
 
-- **Endpoint**: `ws://localhost:1080/api/ws/events`
-- **Events**: Subscribes to "watching" events for athlete state
-- **Data fields used**: speed, power, avgPower, duration
+- **Athlete Data**: `GET http://localhost:1080/api/athlete/v1/self`
+- **Settings**: `GET http://localhost:1080/api/rpc/v1/getSetting/<settingName>`
+- **Data fields used**: speed, power, distance, courseId, routeId, eventSubgroupId, elapsedTime
 
 ### Discord Rich Presence
 
 Updates Discord presence with:
-- **details**: Current speed and power
-- **state**: Average power
+- **details**: Current speed, distance, and power (e.g., "15.2 mph • 3.47 mi | 185W")
+- **state**: Current world and route (e.g., "Two Bridges Loop • Bologna")
 - **startTimestamp**: Ride start time (for duration calculation)
+- **largeImageKey**: zwift_logo (if uploaded to your Discord app)
 
 ## Contributing
 
@@ -179,6 +189,7 @@ MIT License - See LICENSE file for details
 
 - [Sauce for Zwift](https://www.sauce.llc/) - The amazing companion app for Zwift
 - [discord-rpc](https://github.com/discordjs/RPC) - Discord Rich Presence library
+- [zwift-data](https://github.com/andipaetzold/zwift-data) - Comprehensive Zwift worlds and routes data
 
 ## Support
 
