@@ -1,6 +1,6 @@
 {
   "name": "sauce4zwift-discord-status",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Sync your Zwift ride data from Sauce4Zwift to Discord Rich Presence",
   "main": "src/main.js",
   "type": "module",
