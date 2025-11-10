@@ -1,0 +1,58 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build executables
+        run: npm run build:all
+      
+      - name: Create .env.example in dist
+        run: cp .env.example dist/
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            dist/sauce4zwift-discord-status-macos
+            dist/sauce4zwift-discord-status-win.exe
+            dist/sauce4zwift-discord-status-linux
+            dist/.env.example
+          body: |
+            ## Download and Run
+            
+            **No Node.js or npm required!** Just download the executable for your platform:
+            
+            - **macOS**: `sauce4zwift-discord-status-macos`
+            - **Windows**: `sauce4zwift-discord-status-win.exe`
+            - **Linux**: `sauce4zwift-discord-status-linux`
+            
+            ### Quick Start
+            
+            1. Download the executable for your platform
+            2. Download `.env.example` and rename it to `.env` (place in same folder as executable)
+            3. Make sure Discord and Sauce4Zwift are running
+            4. Run the executable
+            
+            That's it! Your Discord status will now show your Zwift ride data!
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

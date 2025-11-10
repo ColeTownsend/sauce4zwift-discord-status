@@ -17,10 +17,25 @@ Sync your Zwift ride data from Sauce4Zwift to Discord Rich Presence. Show your f
 
 1. **Sauce for Zwift** - Download and install from [sauce.llc](https://www.sauce.llc/)
 2. **Discord** - Must be running on your computer
-3. **Node.js** - Version 18 or higher ([download here](https://nodejs.org/))
-4. **Zwift** - Obviously!
+3. **Zwift** - Obviously!
 
 ## Installation
+
+### Option 1: Download & Run (Easiest - No Node.js Required!)
+
+**Just download and double-click!** No installation, no Node.js, no npm needed.
+
+1. Go to [Releases](https://github.com/ColeTownsend/sauce4zwift-discord-status/releases/latest)
+2. Download the file for your platform:
+   - **macOS**: `sauce4zwift-discord-status-macos`
+   - **Windows**: `sauce4zwift-discord-status-win.exe`
+   - **Linux**: `sauce4zwift-discord-status-linux`
+3. Also download `.env.example` and rename it to `.env` (place in same folder as executable)
+4. Double-click the executable to run!
+
+That's it! Make sure Discord and Sauce4Zwift are running, then start riding!
+
+### Option 2: Install from Source (For Developers)
 
 ### Quick Install (Recommended)
 
