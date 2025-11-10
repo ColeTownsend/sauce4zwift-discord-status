@@ -1,0 +1,152 @@
+#!/bin/bash
+# Sauce4Zwift Discord Status Installer
+# Silent installer with progress dialogs
+
+# Get the directory containing this script
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+RESOURCES_DIR="$DIR/../Resources"
+
+# Detect Documents directory
+DOCS_DIR="$HOME/Documents"
+if [ ! -d "$DOCS_DIR" ]; then
+    DOCS_DIR="$HOME/My Documents"
+fi
+
+# Create SauceMods directory if it doesn't exist
+MODS_DIR="$DOCS_DIR/SauceMods"
+if [ ! -d "$MODS_DIR" ]; then
+    mkdir -p "$MODS_DIR"
+fi
+
+# Create mod directory
+MOD_DIR="$MODS_DIR/sauce4zwift-discord-status"
+
+# Remove old installation if exists
+if [ -d "$MOD_DIR" ]; then
+    rm -rf "$MOD_DIR"
+fi
+
+# Create mod directory
+mkdir -p "$MOD_DIR"
+
+# Copy files from app bundle Resources
+cp -r "$RESOURCES_DIR/src" "$MOD_DIR/"
+cp "$RESOURCES_DIR/package.json" "$MOD_DIR/"
+cp "$RESOURCES_DIR/manifest.json" "$MOD_DIR/"
+cp "$RESOURCES_DIR/LICENSE" "$MOD_DIR/"
+cp "$RESOURCES_DIR/README.md" "$MOD_DIR/"
+cp "$RESOURCES_DIR/setup-autostart-macos.sh" "$MOD_DIR/"
+cp "$RESOURCES_DIR/setup-autostart-windows.bat" "$MOD_DIR/"
+cp "$RESOURCES_DIR/AUTOSTART.md" "$MOD_DIR/"
+chmod +x "$MOD_DIR/setup-autostart-macos.sh"
+
+# Install dependencies silently
+cd "$MOD_DIR"
+npm install --silent > /dev/null 2>&1
+
+if [ $? -eq 0 ]; then
+    # Create a start.command file
+    cat > "$MOD_DIR/start.command" << 'STARTSCRIPT'
+#!/bin/bash
+cd "$(dirname "$0")"
+npm start
+STARTSCRIPT
+    chmod +x "$MOD_DIR/start.command"
+
+    # Ask about auto-start setup
+    AUTO_START_CHOICE=$(osascript <<APPLESCRIPT
+display dialog "Installation Complete!
+
+Would you like to enable auto-start?
+
+The plugin will automatically:
+• Start when Sauce4Zwift launches
+• Stop when Sauce4Zwift closes
+• Run silently in the background
+
+You can always change this later." buttons {"Skip", "Enable Auto-Start"} default button "Enable Auto-Start" with title "Sauce4Zwift Discord Status"
+button returned of result
+APPLESCRIPT
+)
+
+    if [ "$AUTO_START_CHOICE" = "Enable Auto-Start" ]; then
+        # Create the watcher script
+        WRAPPER_SCRIPT="$MOD_DIR/sauce-watcher.sh"
+        cat > "$WRAPPER_SCRIPT" << 'WRAPPER'
+#!/bin/bash
+MOD_DIR="$(cd "$(dirname "$0")" && pwd)"
+DISCORD_PID=""
+
+while true; do
+    if pgrep -x "Sauce4Zwift" > /dev/null; then
+        if [ -z "$DISCORD_PID" ] || ! kill -0 "$DISCORD_PID" 2>/dev/null; then
+            cd "$MOD_DIR"
+            npm start > /dev/null 2>&1 &
+            DISCORD_PID=$!
+        fi
+    else
+        if [ -n "$DISCORD_PID" ] && kill -0 "$DISCORD_PID" 2>/dev/null; then
+            kill $DISCORD_PID 2>/dev/null
+            DISCORD_PID=""
+        fi
+    fi
+    sleep 5
+done
+WRAPPER
+        chmod +x "$WRAPPER_SCRIPT"
+
+        # Create LaunchAgent
+        LAUNCH_AGENTS_DIR="$HOME/Library/LaunchAgents"
+        PLIST_PATH="$LAUNCH_AGENTS_DIR/com.sauce4zwift.discord-status.plist"
+        mkdir -p "$LAUNCH_AGENTS_DIR"
+
+        cat > "$PLIST_PATH" << PLIST
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.sauce4zwift.discord-status</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>$WRAPPER_SCRIPT</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>$HOME/Library/Logs/sauce4zwift-discord-status.log</string>
+    <key>StandardErrorPath</key>
+    <string>$HOME/Library/Logs/sauce4zwift-discord-status.error.log</string>
+</dict>
+</plist>
+PLIST
+
+        # Load the LaunchAgent
+        launchctl unload "$PLIST_PATH" 2>/dev/null
+        launchctl load "$PLIST_PATH"
+
+        osascript -e 'display alert "Setup Complete!" message "Auto-start is now enabled!
+
+The plugin will automatically start when you launch Sauce4Zwift.
+
+No need to do anything else - just ride! 🚴
+
+To disable later, see AUTOSTART.md in the installation folder." as informational'
+    else
+        osascript -e 'display alert "Installation Complete!" message "Plugin installed successfully!
+
+To start manually:
+• Open ~/Documents/SauceMods/sauce4zwift-discord-status/
+• Double-click start.command
+
+To enable auto-start later, run setup-autostart-macos.sh
+
+Happy riding! 🚴" as informational'
+    fi
+else
+    # Show error message
+    osascript -e 'display alert "Installation Failed" message "Please make sure Node.js is installed: https://nodejs.org"'
+    exit 1
+fi
