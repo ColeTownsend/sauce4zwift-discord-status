@@ -1,0 +1,26 @@
+{
+  "name": "sauce4zwift-discord-status",
+  "version": "1.0.0",
+  "description": "Sync your Zwift ride data from Sauce4Zwift to Discord Rich Presence",
+  "main": "src/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/main.js",
+    "dev": "node --watch src/main.js"
+  },
+  "keywords": [
+    "zwift",
+    "sauce4zwift",
+    "discord",
+    "rich-presence",
+    "cycling"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord-rpc": "^4.0.1",
+    "dotenv": "^16.4.5",
+    "ws": "^8.18.0",
+    "zwift-data": "^1.45.0"
+  }
+}

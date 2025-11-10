@@ -1,0 +1,8 @@
+{
+  "manifest_version": 1,
+  "name": "Discord Status Sync",
+  "description": "Sync your Zwift ride data to Discord Rich Presence - shows current speed, average power, and ride duration",
+  "author": "Sauce4Zwift Community",
+  "website_url": "https://github.com/yourusername/sauce4zwift-discord-status",
+  "version": "1.0.0"
+}
