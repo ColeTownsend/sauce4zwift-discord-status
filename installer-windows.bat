@@ -37,15 +37,8 @@ echo Copying files...
 xcopy /E /I /Q src "%MOD_DIR%\src"
 copy /Y package.json "%MOD_DIR%\"
 copy /Y manifest.json "%MOD_DIR%\"
-copy /Y .env.example "%MOD_DIR%\"
 copy /Y LICENSE "%MOD_DIR%"
 copy /Y README.md "%MOD_DIR%"
-
-REM Create .env from example if it doesn't exist
-if not exist "%MOD_DIR%\.env" (
-    copy /Y "%MOD_DIR%\.env.example" "%MOD_DIR%\.env"
-    echo Created .env file with default settings
-)
 
 REM Install dependencies
 echo.

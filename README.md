@@ -41,15 +41,16 @@ After installation, just double-click the `start.command` (macOS) or `start.bat`
 
 ### Option 2: Standalone Executable (No Installation)
 
-**Just download and run!** No installation, no Node.js, no npm needed.
+**Just download and run!** No installation, no Node.js, no npm, no configuration needed.
 
 1. Go to [Releases](https://github.com/ColeTownsend/sauce4zwift-discord-status/releases/latest)
 2. Download the executable for your platform:
    - **macOS**: `sauce4zwift-discord-status-macos`
    - **Windows**: `sauce4zwift-discord-status-win.exe`
    - **Linux**: `sauce4zwift-discord-status-linux`
-3. Also download `.env.example` and rename it to `.env` (place in same folder as executable)
-4. Double-click the executable to run!
+3. Double-click the executable to run!
+
+That's it! The plugin works out of the box with no configuration required.
 
 ### Option 3: Install from Source (For Developers)
 
@@ -74,7 +75,6 @@ npm start
 The installer automatically:
 - ✅ Checks for Node.js
 - ✅ Installs all dependencies
-- ✅ Creates `.env` file with pre-configured Discord Client ID
 - ✅ You're ready to ride!
 
 ### Manual Installation
@@ -90,20 +90,17 @@ cd sauce4zwift-discord-status
 npm install
 ```
 
-This automatically creates a `.env` file with the shared Discord Client ID already configured!
-
-### (Optional) Customize Settings
-
-The default configuration works out of the box with:
+That's it! No configuration needed - the plugin works out of the box with:
 - ✅ Pre-configured Discord Client ID (shared, completely safe)
 - ✅ Discord status shows "Zwift Status" with a Zwift logo
 - ✅ Automatic units detection from your Sauce4Zwift settings
 
 **Advanced customization** (optional):
-- Edit `.env` to override the units preference (`UNITS=metric` or `UNITS=imperial`)
-- Create your own Discord Application at [Discord Developer Portal](https://discord.com/developers/applications) for custom branding
-  - Upload custom images under "Rich Presence > Art Assets" (key: `zwift_logo`)
-  - Replace `DISCORD_CLIENT_ID` in `.env` with your own Client ID
+
+To use your own Discord branding, you can create a custom Discord Application:
+1. Create an app at [Discord Developer Portal](https://discord.com/developers/applications)
+2. Upload custom images under "Rich Presence > Art Assets" (key: `zwift_logo`)
+3. Edit `src/main.js` and replace the `DISCORD_CLIENT_ID` value with your Client ID
 
 ### (Optional) Install as Sauce4Zwift Plugin
 
@@ -156,20 +153,17 @@ npm run dev
 
 ## Configuration
 
-Edit your `.env` file to customize settings:
+**No configuration required!** The plugin works out of the box with:
+- Pre-configured shared Discord Client ID
+- Automatic connection to Sauce4Zwift on localhost:1080
+- Automatic units detection from your Sauce4Zwift settings
 
-```env
-# Required: Your Discord Application Client ID
-DISCORD_CLIENT_ID=your_client_id_here
+**For advanced users**: If you want to customize the Discord branding or connection settings, you can edit the values at the top of `src/main.js`:
 
-# Optional: Sauce4Zwift connection (defaults shown)
-SAUCE_HOST=localhost
-SAUCE_PORT=1080
-
-# Optional: Units preference (defaults to your Sauce4Zwift setting)
-# The plugin automatically detects your Sauce4Zwift units preference
-# Only set this if you want to override it
-UNITS=imperial  # or "metric"
+```javascript
+const DISCORD_CLIENT_ID = '1324055805842161745'; // Replace with your own Discord Client ID
+const SAUCE_HOST = 'localhost';
+const SAUCE_PORT = 1080;
 ```
 
 ## How It Works

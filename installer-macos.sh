@@ -37,15 +37,8 @@ echo "📋 Copying files..."
 cp -r src "$MOD_DIR/"
 cp package.json "$MOD_DIR/"
 cp manifest.json "$MOD_DIR/"
-cp .env.example "$MOD_DIR/"
 cp LICENSE "$MOD_DIR/"
 cp README.md "$MOD_DIR/"
-
-# Create .env from example if it doesn't exist
-if [ ! -f "$MOD_DIR/.env" ]; then
-    cp "$MOD_DIR/.env.example" "$MOD_DIR/.env"
-    echo "✓ Created .env file with default settings"
-fi
 
 # Install dependencies
 echo ""

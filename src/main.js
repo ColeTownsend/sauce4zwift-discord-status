@@ -1,39 +1,19 @@
-import dotenv from 'dotenv';
 import { SauceRestClient } from './rest-client.js';
 import { DiscordPresenceManager } from './discord-presence.js';
 
-// Load environment variables
-dotenv.config();
-
 // Configuration
-const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID;
-const SAUCE_HOST = process.env.SAUCE_HOST || 'localhost';
-const SAUCE_PORT = process.env.SAUCE_PORT || 1080;
-const UNITS = (process.env.UNITS || 'imperial').toLowerCase();
-
-// Validate configuration
-if (!DISCORD_CLIENT_ID) {
-  console.error('ERROR: DISCORD_CLIENT_ID is not set in .env file');
-  console.error('Please create a .env file with your Discord Client ID');
-  console.error('See README.md for instructions on how to get a Discord Client ID');
-  process.exit(1);
-}
-
-// Validate units
-if (!['imperial', 'metric'].includes(UNITS)) {
-  console.error(`ERROR: UNITS must be "imperial" or "metric", got "${UNITS}"`);
-  process.exit(1);
-}
+const DISCORD_CLIENT_ID = '1324055805842161745'; // Shared Discord Client ID
+const SAUCE_HOST = 'localhost';
+const SAUCE_PORT = 1080;
 
 console.log('=== Sauce4Zwift Discord Status Sync ===');
 console.log(`Sauce4Zwift: ${SAUCE_HOST}:${SAUCE_PORT}`);
 console.log(`Discord Client ID: ${DISCORD_CLIENT_ID.substring(0, 8)}...`);
-console.log(`Units: ${UNITS}`);
 console.log('');
 
 // Initialize clients
 const sauceClient = new SauceRestClient(SAUCE_HOST, SAUCE_PORT);
-const discordPresence = new DiscordPresenceManager(DISCORD_CLIENT_ID, UNITS);
+const discordPresence = new DiscordPresenceManager(DISCORD_CLIENT_ID);
 
 // Track connection state
 let isRiding = false;
@@ -97,14 +77,9 @@ async function start() {
 
   // Fetch units preference from Sauce4Zwift
   const imperialUnits = await sauceClient.getSetting('imperialUnits');
-  let units = UNITS; // Default from .env
+  const units = imperialUnits !== null ? (imperialUnits ? 'imperial' : 'metric') : 'imperial';
 
-  if (imperialUnits !== null) {
-    units = imperialUnits ? 'imperial' : 'metric';
-    console.log(`✓ Using units from Sauce4Zwift: ${units}`);
-  } else {
-    console.log(`Using units from .env: ${units}`);
-  }
+  console.log(`✓ Units: ${units} ${imperialUnits !== null ? '(from Sauce4Zwift)' : '(default)'}`);
 
   // Update Discord presence manager with the correct units
   discordPresence.units = units;

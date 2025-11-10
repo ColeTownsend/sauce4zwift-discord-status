@@ -6,6 +6,8 @@ node_modules/
 
 # Build output
 dist/
+release-package/
+*.zip
 
 # Logs
 *.log
