@@ -21,21 +21,37 @@ Sync your Zwift ride data from Sauce4Zwift to Discord Rich Presence. Show your f
 
 ## Installation
 
-### Option 1: Download & Run (Easiest - No Node.js Required!)
+### Option 1: Auto-Installer (Recommended - Installs as Sauce4Zwift Mod)
 
-**Just download and double-click!** No installation, no Node.js, no npm needed.
+**Automatic installation to your SauceMods directory!**
+
+1. Download the [latest release](https://github.com/ColeTownsend/sauce4zwift-discord-status/releases/latest)
+2. Extract the ZIP file
+3. Run the installer for your platform:
+   - **macOS**: Double-click `installer-macos.sh` (or run `./installer-macos.sh` in Terminal)
+   - **Windows**: Double-click `installer-windows.bat`
+
+The installer will:
+- ✅ Create `~/Documents/SauceMods` directory if needed
+- ✅ Install the mod to `~/Documents/SauceMods/sauce4zwift-discord-status`
+- ✅ Set up all dependencies automatically
+- ✅ Create a launch shortcut (`start.command` or `start.bat`)
+
+After installation, just double-click the `start.command` (macOS) or `start.bat` (Windows) file to launch!
+
+### Option 2: Standalone Executable (No Installation)
+
+**Just download and run!** No installation, no Node.js, no npm needed.
 
 1. Go to [Releases](https://github.com/ColeTownsend/sauce4zwift-discord-status/releases/latest)
-2. Download the file for your platform:
+2. Download the executable for your platform:
    - **macOS**: `sauce4zwift-discord-status-macos`
    - **Windows**: `sauce4zwift-discord-status-win.exe`
    - **Linux**: `sauce4zwift-discord-status-linux`
 3. Also download `.env.example` and rename it to `.env` (place in same folder as executable)
 4. Double-click the executable to run!
 
-That's it! Make sure Discord and Sauce4Zwift are running, then start riding!
-
-### Option 2: Install from Source (For Developers)
+### Option 3: Install from Source (For Developers)
 
 ### Quick Install (Recommended)
 
