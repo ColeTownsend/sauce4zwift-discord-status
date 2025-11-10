@@ -1,12 +1,22 @@
 {
   "name": "sauce4zwift-discord-status",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Sync your Zwift ride data from Sauce4Zwift to Discord Rich Presence",
   "main": "src/main.js",
   "type": "module",
+  "bin": "src/main.js",
+  "pkg": {
+    "assets": [
+      "node_modules/**/*"
+    ]
+  },
   "scripts": {
     "start": "node src/main.js",
-    "dev": "node --watch src/main.js"
+    "dev": "node --watch src/main.js",
+    "build:mac": "pkg . --targets node18-macos-x64 --output dist/sauce4zwift-discord-status-macos --compress GZip",
+    "build:win": "pkg . --targets node18-win-x64 --output dist/sauce4zwift-discord-status-win.exe --compress GZip",
+    "build:linux": "pkg . --targets node18-linux-x64 --output dist/sauce4zwift-discord-status-linux --compress GZip",
+    "build:all": "npm run build:mac && npm run build:win && npm run build:linux"
   },
   "keywords": [
     "zwift",
@@ -20,6 +30,9 @@
   "dependencies": {
     "ws": "^8.18.0",
     "discord-rpc": "^4.0.1",
-    "dotenv": "^16.4.5"
+    "zwift-data": "^1.45.0"
+  },
+  "devDependencies": {
+    "pkg": "^5.8.1"
   }
 }
