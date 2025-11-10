@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node src/main.js",
-    "dev": "node --watch src/main.js"
+    "dev": "node --watch src/main.js",
+    "postinstall": "node -e \"const fs = require('fs'); if (!fs.existsSync('.env')) { fs.copyFileSync('.env.example', '.env'); console.log('✓ Created .env file with default settings'); }\""
   },
   "keywords": [
     "zwift",

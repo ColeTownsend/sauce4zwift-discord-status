@@ -22,37 +22,59 @@ Sync your Zwift ride data from Sauce4Zwift to Discord Rich Presence. Show your f
 
 ## Installation
 
-### Step 1: Clone or Download This Repository
+### Quick Install (Recommended)
 
+**macOS/Linux:**
 ```bash
-git clone https://github.com/yourusername/sauce4zwift-discord-status.git
+git clone https://github.com/ColeTownsend/sauce4zwift-discord-status.git
+cd sauce4zwift-discord-status
+./install.sh
+npm start
+```
+
+**Windows:**
+```cmd
+git clone https://github.com/ColeTownsend/sauce4zwift-discord-status.git
+cd sauce4zwift-discord-status
+install.bat
+npm start
+```
+
+The installer automatically:
+- ✅ Checks for Node.js
+- ✅ Installs all dependencies
+- ✅ Creates `.env` file with pre-configured Discord Client ID
+- ✅ You're ready to ride!
+
+### Manual Installation
+
+**Step 1: Clone the repository**
+```bash
+git clone https://github.com/ColeTownsend/sauce4zwift-discord-status.git
 cd sauce4zwift-discord-status
 ```
 
-### Step 2: Install Dependencies
-
+**Step 2: Install dependencies**
 ```bash
 npm install
 ```
 
-### Step 3: Configure Environment Variables
+This automatically creates a `.env` file with the shared Discord Client ID already configured!
 
-1. Copy the example environment file:
-   ```bash
-   cp .env.example .env
-   ```
+### (Optional) Customize Settings
 
-2. (Optional) The `.env` file already includes a shared Discord Client ID that works out of the box!
-   - The default Client ID is already configured
-   - Everyone can use the same Client ID (this is normal for Rich Presence apps)
-   - Your Discord status will show "Zwift Status" with a Zwift logo
+The default configuration works out of the box with:
+- ✅ Pre-configured Discord Client ID (shared, completely safe)
+- ✅ Discord status shows "Zwift Status" with a Zwift logo
+- ✅ Automatic units detection from your Sauce4Zwift settings
 
-3. (Advanced) If you want to customize the app name or logo:
-   - Create your own Discord Application at [Discord Developer Portal](https://discord.com/developers/applications)
-   - Upload custom images under "Rich Presence > Art Assets" (key: `zwift_logo`)
-   - Replace the `DISCORD_CLIENT_ID` in `.env` with your own Client ID
+**Advanced customization** (optional):
+- Edit `.env` to override the units preference (`UNITS=metric` or `UNITS=imperial`)
+- Create your own Discord Application at [Discord Developer Portal](https://discord.com/developers/applications) for custom branding
+  - Upload custom images under "Rich Presence > Art Assets" (key: `zwift_logo`)
+  - Replace `DISCORD_CLIENT_ID` in `.env` with your own Client ID
 
-### Step 4: Install as Sauce4Zwift Plugin (Optional)
+### (Optional) Install as Sauce4Zwift Plugin
 
 To have this plugin recognized by Sauce4Zwift:
 
