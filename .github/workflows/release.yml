@@ -29,7 +29,7 @@ jobs:
         run: |
           # Create release directory structure
           mkdir -p release-package
-          cp -r src package.json manifest.json .env.example LICENSE README.md release-package/
+          cp -r src package.json manifest.json LICENSE README.md release-package/
           cp installer-macos.sh installer-windows.bat release-package/
           chmod +x release-package/installer-macos.sh
 
@@ -37,9 +37,6 @@ jobs:
           cd release-package
           zip -r ../sauce4zwift-discord-status-installer.zip .
           cd ..
-
-          # Copy .env.example to dist for standalone builds
-          cp .env.example dist/
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
@@ -50,7 +47,6 @@ jobs:
             dist/sauce4zwift-discord-status-macos
             dist/sauce4zwift-discord-status-win.exe
             dist/sauce4zwift-discord-status-linux
-            dist/.env.example
           body: |
             ## Installation Options
 
@@ -72,14 +68,13 @@ jobs:
 
             ### Option 2: Standalone Executable
 
-            **No installation needed!**
+            **No installation or configuration needed!**
 
             1. Download the executable for your platform:
                - **macOS**: `sauce4zwift-discord-status-macos`
                - **Windows**: `sauce4zwift-discord-status-win.exe`
                - **Linux**: `sauce4zwift-discord-status-linux`
-            2. Download `.env.example` and rename to `.env`
-            3. Double-click to run!
+            2. Double-click to run!
 
             ---
 
